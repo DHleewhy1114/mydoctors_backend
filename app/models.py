@@ -62,6 +62,7 @@ class Doctor(Base):
     hospital_id = Column(Integer,ForeignKey('hospital.id'),nullable=False)
 
 class Hospital(Base):
+    #api를 통해 좌표 받아오기
     __tablename__='hospital'
     id = Column(Integer, primary_key=True)
     Hospitalname = Column(String(1000))
@@ -96,30 +97,3 @@ class Messagerecipient(Base):
     id = Column(Integer, primary_key=True)
     recipient_id = Column(Integer, ForeignKey('user.id'), nullable=False)
     message_id = Column(Integer, ForeignKey('message.id'), nullable=False)
-
-"""
-class Category(Base):
-    __tablename__='category'
-    id = Column(Integer, primary_key=True)
-    category_name = Column(String(64),index=True)
-
-class Quest(Base):
-    __tablename__='quest'
-    id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey('user.id'), nullable=False)
-    title = Column(String(50))
-    content = Column(String(1000))
-    denied = Column(Boolean)
-    category_id = Column(Integer, ForeignKey('category.id'), nullable=False)
-    created = Column(String(50))
-    edited = Column(String(50))
-
-class Process(Base):
-    __tablename__='process'
-    id = Column(Integer, primary_key=True)
-    denied = Column(Boolean)
-    quest_id = Column(Integer, ForeignKey('quest.id'), nullable=False)
-    user_id = Column(Integer, ForeignKey('user.id'), nullable=False)
-    created = Column(String(50))
-    edited = Column(String(50))
-"""

@@ -1,5 +1,4 @@
 from ast import literal_eval
-#from models import User, Category, Board, Comment
 import models
 import logging
 import sys
