@@ -20,8 +20,8 @@ class ScheduleAttribute:
     uid = graphene.ID()
     did = graphene.ID()
     content = graphene.String()
-    time_from = graphene.datetime()
-    time_to = graphene.datetime()
+    time_from = graphene.String()
+    time_to = graphene.String()
 
 class Schedule(SQLAlchemyObjectType):
     class Meta:

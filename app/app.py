@@ -57,8 +57,8 @@ mutation{
 """
 def graphql_view():
     view = GraphQLView.as_view('graphql', schema=schema, graphiql=True)
-    #return view
-    return jwt_required(view)
+    return view
+    #return jwt_required(view)
 
 app.add_url_rule('/graphql', view_func=graphql_view())
 

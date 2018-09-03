@@ -4,6 +4,7 @@ from graphene_sqlalchemy import SQLAlchemyObjectType, SQLAlchemyConnectionField
 from models import db_session, Message as MessageModel, Messagerecipient as MessagerecipientModel, Base
 from utils import input_to_dictionary
 from datetime import datetime
+import schema_messagerecipient
 from flask_jwt_extended import current_user, jwt_required
 """
   class Message(Base):
@@ -13,6 +14,11 @@ from flask_jwt_extended import current_user, jwt_required
     did = Column(Integer, ForeignKey('doctor.id'), nullable=False)
     parent_id = Column(Integer,ForeignKey('question.id'),nullable=True)
     content = Column(String(1000))
+
+class MessagerecipientAttribute:
+    recipient_id = graphene.ID()
+    message_id = graphene.ID()
+    
 """
 class MessageAttribute:
     uid = graphene.ID()
@@ -25,8 +31,10 @@ class Message(SQLAlchemyObjectType):
         model = MessageModel
         interfaces = (relay.Node, )
 
+
 class CreateMessageInput(graphene.InputObjectType, MessageAttribute):
     pass
+
 
 class CreateMessage(graphene.Mutation):
     message = graphene.Field(lambda:Message)
@@ -40,6 +48,7 @@ class CreateMessage(graphene.Mutation):
         message = MessageModel(**data)
         db_session.add(message)
         db_session.commit()
+        #middleware 처리할
         return CreateMessage(message=message)
 
 

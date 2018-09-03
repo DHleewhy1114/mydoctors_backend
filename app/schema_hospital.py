@@ -14,9 +14,9 @@ from flask_jwt_extended import current_user, jwt_required
     position_y = Column(Integer)
 """
 class HospitalAttribute:
-    hospitalname = graphene.String()
-    position_x = graphene.Integer()
-    position_y = graphene.Integer()
+    hospital_name = graphene.String()
+    position_x = graphene.Int()
+    position_y = graphene.Int()
 
 class Hospital(SQLAlchemyObjectType):
     class Meta:

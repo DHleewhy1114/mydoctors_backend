@@ -5,7 +5,7 @@ from sqlalchemy.orm import (scoped_session, sessionmaker, relationship,
 from sqlalchemy.ext.declarative import declarative_base
 from werkzeug.security import generate_password_hash
 
-engine = create_engine('mysql://quest:mission@localhost/QUEST', convert_unicode=True)
+engine = create_engine('mysql://mydoc:mydoc@localhost/mydoc', convert_unicode=True)
 db_session = scoped_session(sessionmaker(bind=engine, expire_on_commit=False))
 
 Base = declarative_base()
@@ -47,7 +47,9 @@ class User(Base):
     password_hash = Column(String(256))
     created = Column(String(50))
     edited = Column(String(50))
-    
+    #isdoctor = Column(Boolean)
+    #hospital_id = Column(Integer,ForeignKey('hospital.id'),nullable=False)
+
     def __repr__(self):
         return '<User {}>'.format(self.username)
 
@@ -58,42 +60,94 @@ class User(Base):
 class Doctor(Base):
     __tablename__='doctor'
     id = Column(Integer, primary_key=True)
-    doctorname = Column(String(64), index=True)
-    hospital_id = Column(Integer,ForeignKey('hospital.id'),nullable=False)
+    doctor_name = Column(String(64), index=True)
+    doctor_code = Column(Integer,index = True)
+    hospital_id = Column(Integer,ForeignKey('hospital.id'),nullable=false)
+    created = Column(String(50))
+    edited = Column(String(50))
 
 class Hospital(Base):
     #api를 통해 좌표 받아오기
     __tablename__='hospital'
     id = Column(Integer, primary_key=True)
-    Hospitalname = Column(String(1000))
+    hospital_name = Column(String(1000))
     position_x = Column(Integer)
     position_y = Column(Integer)
-    
+    created = Column(String(50))
+    edited = Column(String(50))
+    doctorList = relationship(Doctor, backref='doctor')
+
 class Relationship(Base):
     __tablename__='relationship'
     id = Column(Integer,primary_key=True)
     uid = Column(Integer, ForeignKey('user.id'), nullable=False)
     did = Column(Integer, ForeignKey('doctor.id'), nullable=False)
+    created = Column(String(50))
+    edited = Column(String(50))
 
 class Schedule(Base):
     __tablename__='schedule'
     id = Column(Integer, primary_key=True)
     uid = Column(Integer, ForeignKey('user.id'), nullable=False)
     did = Column(Integer, ForeignKey('doctor.id'), nullable=False)
-    content = Column(String(1000))
-    time_from = Column(datetime)
-    time_to = Column(datetime)
+    time_from = Column(String(50))
+    time_to = Column(String(50))
+    created = Column(String(50))
+    edited = Column(String(50))
+    question_id = Column(Integer,ForeignKey('question.id'),nullable=True)
 
-class Message(Base):
-    __tablename__='message'
+
+class Question(Base):
+    __tablename__='question'
     id = Column(Integer, primary_key=True)
     uid = Column(Integer, ForeignKey('user.id'), nullable=False)
     did = Column(Integer, ForeignKey('doctor.id'), nullable=False)
-    parent_id = Column(Integer,ForeignKey('question.id'),nullable=True)
+    contents = Column(String(1000))
+    created = Column(String(50))
+    edited = Column(String(50))
+    #webserver will find_image 
+
+class Answer(Base):
+    __tablename__='answer'
+    id = Column(Integer, primary_key=True)
+    uid = Column(Integer, ForeignKey('user.id'), nullable=False)
+    did = Column(Integer, ForeignKey('doctor.id'), nullable=False)
+    question_id = Column(Integer,ForeignKey('question.id'),nullable=False)
+    contents = Column(String(1000))
+    created = Column(String(50))
+    edited = Column(String(50))
+    #schedule_id = Column(Integer,ForeignKey('schedule.id'),nullable=False)
+
+"""
+class Message(Base):
+    __tablename__='message'
+    id = Column(Integer, primary_key=True)
+    #uid = Column(Integer, ForeignKey('user.id'), nullable=False)
+    #did = Column(Integer, ForeignKey('doctor.id'), nullable=False)
+    is_doctor_send = Column(Boolean)
+    parent_id = Column(Integer,ForeignKey('message.id'),nullable=True)
     content = Column(String(1000))
+    created = Column(String(50))
+    edited = Column(String(50))
+    chatroom_id = Column(Integer,ForeignKey('chatroom.id'),nullable=True)
+
+#chatroom message timestamp 정렬?
+
 
 class Messagerecipient(Base):
     __tablename__='messagerecipient'
     id = Column(Integer, primary_key=True)
     recipient_id = Column(Integer, ForeignKey('user.id'), nullable=False)
     message_id = Column(Integer, ForeignKey('message.id'), nullable=False)
+    created = Column(String(50))
+    edited = Column(String(50))
+
+class Chatroom(Base):
+    __tablename__='chatroom'
+    id = Column(Integer, primary_key=True)
+    uid = Column(Integer, ForeignKey('user.id'), nullable=False)
+    did = Column(Integer, ForeignKey('doctor.id'), nullable=False)
+    created = Column(String(50))
+    edited = Column(String(50))
+
+"""

@@ -12,8 +12,10 @@ __tablename__='doctor'
     hospital_id = Column(Integer,ForeignKey('hospital.id'),nullable=False)
 """
 class DoctorAttribute:
-    doctorname = graphene.String()
+    doctor_name = graphene.String()
     hospital_id = graphene.ID()
+    doctor_code = graphene.Int()
+
 
 class Doctor(SQLAlchemyObjectType):
     class Meta:
@@ -32,7 +34,6 @@ class CreateDoctor(graphene.Mutation):
         data = input_to_dictionary(input)
         data['created'] = datetime.utcnow()
         data['edited'] = datetime.utcnow()
-        #data['password_hash']=UserModel.set_password(data['password_hash'])
         doctor = DoctorModel(**data)
         db_session.add(doctor)
         db_session.commit()

@@ -45,7 +45,7 @@ class UpdateMessagerecipientInput(graphene.InputObjectType, MessagerecipientAttr
     id = graphene.ID(required=True)
 
 
-class UpdateMessage(graphene.Mutation):
+class UpdateMessagerecipient(graphene.Mutation):
     """Update"""
     messagerecipient = graphene.Field(lambda: Messagerecipient, )
 
