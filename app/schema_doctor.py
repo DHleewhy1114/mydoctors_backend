@@ -15,7 +15,7 @@ class DoctorAttribute:
     doctor_name = graphene.String()
     hospital_id = graphene.ID()
     doctor_code = graphene.Int()
-
+    #doctor_info = graphene.String()
 
 class Doctor(SQLAlchemyObjectType):
     class Meta:

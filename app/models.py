@@ -63,6 +63,7 @@ class Doctor(Base):
     doctor_name = Column(String(64), index=True)
     doctor_code = Column(Integer,index = True)
     hospital_id = Column(Integer,ForeignKey('hospital.id'),nullable=false)
+    #doctor_info = Column(String(50))
     created = Column(String(50))
     edited = Column(String(50))
 
