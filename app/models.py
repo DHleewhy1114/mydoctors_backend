@@ -106,13 +106,14 @@ class Question(Base):
     contents = Column(String(1000))
     created = Column(String(50))
     edited = Column(String(50))
+
     #webserver will find_image 
 
 class Answer(Base):
     __tablename__='answer'
     id = Column(Integer, primary_key=True)
-    uid = Column(Integer, ForeignKey('user.id'), nullable=False)
-    did = Column(Integer, ForeignKey('doctor.id'), nullable=False)
+    #uid = Column(Integer, ForeignKey('user.id'), nullable=False)
+    #did = Column(Integer, ForeignKey('doctor.id'), nullable=False)
     question_id = Column(Integer,ForeignKey('question.id'),nullable=False)
     contents = Column(String(1000))
     created = Column(String(50))

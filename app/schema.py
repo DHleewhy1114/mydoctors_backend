@@ -10,6 +10,7 @@ from schema_question import CreateQuestion, Question
 from schema_answer import CreateAnswer, Answer
 from schema_relationship import CreateRelationship, Relationship
 from schema_schedule import CreateSchedule, Schedule
+import base64
 """
 from schema_category import CreateCatgory, Category
 from schema_quest import CreateQuest, Quest
@@ -46,10 +47,12 @@ class Query(graphene.ObjectType):
     find_doctor_by_code = graphene.Field(lambda:Doctor,doctor_code=graphene.Int())
     question = relay.Node.Field(Question)
     questionlist = SQLAlchemyConnectionField(Question)
+    question_by_user = graphene.List(lambda:Question,uid=graphene.ID(),did=graphene.ID())
     relationship = relay.Node.Field(Relationship)
     relationshiplist = SQLAlchemyConnectionField(Relationship)
     answer = relay.Node.Field(Answer)
     answerlist = SQLAlchemyConnectionField(Answer)
+    answer_by_question = graphene.List(lambda:Answer,question_id=graphene.ID())
     hospital = relay.Node.Field(Hospital)
     hospitallist = SQLAlchemyConnectionField(Hospital)
     find_hospital = graphene.List(lambda:Hospital,hospital_name=graphene.String())
@@ -80,6 +83,21 @@ class Query(graphene.ObjectType):
         query = Hospital.get_query(info)
         return query.filter(HospitalModel.hospital_name == hospital_name).all()
         
+    def resolve_question_by_user(self,info,uid,did):
+        query = Question.get_query(info)
+        uid = base64.b64decode(uid)
+        did = base64.b64decode(did)
+        int_uid = int(str(uid)[7:-1])
+        int_did = int(str(did)[9:-1])
+        print (int_did)
+        return query.filter(QuestionModel.uid == int_uid).filter(QuestionModel.did == int_did).all()
+    
+    def resolve_answer_by_question(self,info,question_id):
+        query = Answer.get_query(info)
+        question_id = base64.b64decode(question_id)
+        int_question_id = int(str(question_id)[11:-1])
+        print (int_question_id)
+        return query.filter(AnswerModel.question_id == int_question_id).all()
 """
 수정 및 삭제 쿼리 만들것
 """

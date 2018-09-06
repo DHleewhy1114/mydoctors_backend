@@ -17,8 +17,8 @@ from flask_jwt_extended import current_user, jwt_required
     edited = Column(String(50))
 """
 class AnswerAttribute:
-    uid = graphene.ID()
-    did = graphene.ID()
+    #uid = graphene.ID()
+    #did = graphene.ID()
     question_id = graphene.ID()
     contents = graphene.String()
 
