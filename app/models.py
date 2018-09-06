@@ -86,6 +86,9 @@ class Relationship(Base):
     created = Column(String(50))
     edited = Column(String(50))
 
+    def mydoctor_id(self):
+        return [self.did]
+
 class Schedule(Base):
     __tablename__='schedule'
     id = Column(Integer, primary_key=True)

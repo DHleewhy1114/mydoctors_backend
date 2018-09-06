@@ -39,10 +39,12 @@ class Mutations(graphene.ObjectType):
 class Query(graphene.ObjectType):
     node = relay.Node.Field()
     user = relay.Node.Field(User)
-    userlist = SQLAlchemyConnectionField(User)
+    #userlist = SQLAlchemyConnectionField(User)
     find_user = graphene.List(lambda: User, username = graphene.String())
     doctor = relay.Node.Field(Doctor)
     doctorlist = SQLAlchemyConnectionField(Doctor)
+    mydoctors = graphene.List(lambda:Doctor,id=graphene.String())
+    #mydoctorslist =  graphene.List(lambda:Doctor,did=graphene.String())
     find_doctor = graphene.List(lambda:Doctor,doctor_name=graphene.String())
     find_doctor_by_code = graphene.Field(lambda:Doctor,doctor_code=graphene.Int())
     question = relay.Node.Field(Question)
@@ -51,7 +53,7 @@ class Query(graphene.ObjectType):
     relationship = relay.Node.Field(Relationship)
     relationshiplist = SQLAlchemyConnectionField(Relationship)
     answer = relay.Node.Field(Answer)
-    answerlist = SQLAlchemyConnectionField(Answer)
+    #answerlist = SQLAlchemyConnectionField(Answer)
     answer_by_question = graphene.List(lambda:Answer,question_id=graphene.ID())
     hospital = relay.Node.Field(Hospital)
     hospitallist = SQLAlchemyConnectionField(Hospital)
@@ -73,7 +75,6 @@ class Query(graphene.ObjectType):
         #안되는 이유는 리스트 객체라 어려운거 같음
         print (query.filter(DoctorModel.doctor_name == doctor_name).all())
         return query.filter(DoctorModel.doctor_name == doctor_name).all()
-        #(DoctorModel.doctor_name == doctor_name).all()#filter의 all이 안먹
     
     def resolve_find_doctor_by_code(self,info,doctor_code):
         query = Doctor.get_query(info)
@@ -98,10 +99,55 @@ class Query(graphene.ObjectType):
         int_question_id = int(str(question_id)[11:-1])
         print (int_question_id)
         return query.filter(AnswerModel.question_id == int_question_id).all()
+
+    def resolve_mydoctors(self,info,id):
+        """query {
+  mydoctors(id:"VXNlcjox"==user_id){
+    doctorName
+    doctorCode
+    }
+}       """
+        a=[]
+        b=[]
+        query = Relationship.get_query(info)
+        doctor_query=Doctor.get_query(info)
+        user_id = base64.b64decode(id)
+        int_user_id =int(str(user_id)[7:-1])
+        for item in query.filter(RelationshipModel.uid==int_user_id).all():
+            print (doctor_query.filter(DoctorModel.id == item.__dict__['did'] ).first())
+            b+=[doctor_query.filter(DoctorModel.id == item.__dict__['did']).first()]
+        return b
+        
 """
 수정 및 삭제 쿼리 만들것
 """
-
+"""
+query{
+  mydoctors(uid:"VXNlcjox"){
+   doctor{
+    doctorList{
+      edges{
+        node{
+          doctorName
+          doctorCode
+        }
+      }
+    }
+  }
+  }
+}
+{
+  "data": {
+    "createRelationship": {
+      "relationship": {
+        "id": "UmVsYXRpb25zaGlwOjI=",
+        "uid": 1,
+        "did": 1
+      }
+    }
+  }
+}
+"""
 
 """  node = graphene.relay.Node.Field()
     people = graphene.relay.Node.Field(schema_people.People)
