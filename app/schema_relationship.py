@@ -5,6 +5,7 @@ from models import db_session, Relationship as RelationshipModel, Base
 from utils import input_to_dictionary
 from datetime import datetime
 from flask_jwt_extended import current_user, jwt_required
+import base64
 """
    class relationship(Base):
     __tablename__='relationship'
@@ -30,14 +31,24 @@ class CreateRelationship(graphene.Mutation):
     class Arguments:
         input = CreateRelationshipInput(required=True)
     def mutate(self, info, input):
-        data = input_to_dictionary(input)
-        data['created'] = datetime.utcnow()
-        data['edited'] = datetime.utcnow()
-        relationship = RelationshipModel(**data)
-        db_session.add(relationship)
-        db_session.commit()
-        return CreateRelationship(relationship=relationship)
-
+        isExist=False
+        uid= base64.b64decode(input.uid)
+        did= base64.b64decode(input.did)
+        int_uid = int(str(uid)[7:-1])
+        int_did = int(str(did)[9:-1])
+        query_by_uid = db_session.query(RelationshipModel).filter_by(uid=int_uid,did=int_did)
+        if(query_by_uid.all()!=[]):
+            print ("isexist")
+            return
+        else:
+            data = input_to_dictionary(input)
+            data['created'] = datetime.utcnow()
+            data['edited'] = datetime.utcnow()
+            relationship = RelationshipModel(**data)
+            db_session.add(relationship)
+            db_session.commit()
+            return CreateRelationship(relationship=relationship)
+        
 
 class UpdateRelationshipInput(graphene.InputObjectType, RelationshipAttribute):
     """Arguments to update"""

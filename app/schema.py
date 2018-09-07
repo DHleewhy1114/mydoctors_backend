@@ -78,6 +78,8 @@ class Query(graphene.ObjectType):
     
     def resolve_find_doctor_by_code(self,info,doctor_code):
         query = Doctor.get_query(info)
+        print ("codequery")
+        print (query.filter(DoctorModel.doctor_code == doctor_code).first())
         return query.filter(DoctorModel.doctor_code == doctor_code).first()
     
     def resolve_find_hospital(self,info,hospital_name):
@@ -107,16 +109,15 @@ class Query(graphene.ObjectType):
     doctorCode
     }
 }       """
-        a=[]
-        b=[]
+        mydoctors_list=[]
         query = Relationship.get_query(info)
         doctor_query=Doctor.get_query(info)
         user_id = base64.b64decode(id)
         int_user_id =int(str(user_id)[7:-1])
         for item in query.filter(RelationshipModel.uid==int_user_id).all():
             print (doctor_query.filter(DoctorModel.id == item.__dict__['did'] ).first())
-            b+=[doctor_query.filter(DoctorModel.id == item.__dict__['did']).first()]
-        return b
+            mydoctors_list+=[doctor_query.filter(DoctorModel.id == item.__dict__['did']).first()]
+        return mydoctors_list
         
 """
 수정 및 삭제 쿼리 만들것
@@ -147,13 +148,6 @@ query{
     }
   }
 }
-"""
-
-"""  node = graphene.relay.Node.Field()
-    people = graphene.relay.Node.Field(schema_people.People)
-    peopleList = SQLAlchemyConnectionField(schema_people.People)
-    planet = graphene.relay.Node.Field(schema_planet.Planet)
-    planetList = SQLAlchemyConnectionField(schema_planet.Planet
 """
 schema = graphene.Schema(query=Query,mutation=Mutations)
 

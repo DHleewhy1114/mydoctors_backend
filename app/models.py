@@ -109,7 +109,7 @@ class Question(Base):
     contents = Column(String(1000))
     created = Column(String(50))
     edited = Column(String(50))
-
+    answerList = relationship(Answer, backref='doctor')
     #webserver will find_image 
 
 class Answer(Base):
