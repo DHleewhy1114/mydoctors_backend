@@ -100,18 +100,6 @@ class Schedule(Base):
     edited = Column(String(50))
     question_id = Column(Integer,ForeignKey('question.id'),nullable=True)
 
-
-class Question(Base):
-    __tablename__='question'
-    id = Column(Integer, primary_key=True)
-    uid = Column(Integer, ForeignKey('user.id'), nullable=False)
-    did = Column(Integer, ForeignKey('doctor.id'), nullable=False)
-    contents = Column(String(1000))
-    created = Column(String(50))
-    edited = Column(String(50))
-    answerList = relationship(Answer, backref='doctor')
-    #webserver will find_image 
-
 class Answer(Base):
     __tablename__='answer'
     id = Column(Integer, primary_key=True)
@@ -122,6 +110,17 @@ class Answer(Base):
     created = Column(String(50))
     edited = Column(String(50))
     #schedule_id = Column(Integer,ForeignKey('schedule.id'),nullable=False)
+
+class Question(Base):
+    __tablename__='question'
+    id = Column(Integer, primary_key=True)
+    uid = Column(Integer, ForeignKey('user.id'), nullable=False)
+    did = Column(Integer, ForeignKey('doctor.id'), nullable=False)
+    contents = Column(String(1000))
+    created = Column(String(50))
+    edited = Column(String(50))
+    answerList = relationship(Answer, backref='answer')#석재할것
+    #webserver will find_image 
 
 """
 class Message(Base):
