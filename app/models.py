@@ -4,7 +4,7 @@ from sqlalchemy.orm import (scoped_session, sessionmaker, relationship,
                             backref)
 from sqlalchemy.ext.declarative import declarative_base
 from werkzeug.security import generate_password_hash
-
+#from sqlalchemy_imageattach.entity import Image,image_attachment
 engine = create_engine('mysql://mydoc:mydoc@localhost/mydoc', convert_unicode=True)
 db_session = scoped_session(sessionmaker(bind=engine, expire_on_commit=False))
 
@@ -49,7 +49,7 @@ class User(Base):
     edited = Column(String(50))
     #isdoctor = Column(Boolean)
     #hospital_id = Column(Integer,ForeignKey('hospital.id'),nullable=False)
-
+    #profile_photo = Column(String(129))
     def __repr__(self):
         return '<User {}>'.format(self.username)
 
@@ -66,6 +66,7 @@ class Doctor(Base):
     #doctor_info = Column(String(50))
     created = Column(String(50))
     edited = Column(String(50))
+    #profile_photo = Column(String(129))
 
 class Hospital(Base):
     #api를 통해 좌표 받아오기
@@ -94,8 +95,7 @@ class Schedule(Base):
     id = Column(Integer, primary_key=True)
     uid = Column(Integer, ForeignKey('user.id'), nullable=False)
     did = Column(Integer, ForeignKey('doctor.id'), nullable=False)
-    time_from = Column(String(50))
-    time_to = Column(String(50))
+    time = Column(String(50))
     created = Column(String(50))
     edited = Column(String(50))
     question_id = Column(Integer,ForeignKey('question.id'),nullable=True)
@@ -119,8 +119,8 @@ class Question(Base):
     contents = Column(String(1000))
     created = Column(String(50))
     edited = Column(String(50))
-    answerList = relationship(Answer, backref='answer')#석재할것
-    #webserver will find_image 
+    answerList = relationship(Answer, backref='answer')
+    #profile_photo = Column(String(129))
 
 """
 class Message(Base):

@@ -12,16 +12,14 @@ from flask_jwt_extended import current_user, jwt_required
     uid = Column(Integer, ForeignKey('user.id'), nullable=False)
     did = Column(Integer, ForeignKey('doctor.id'), nullable=False)
     content = Column(String(1000))
-    time_from = Column(datetime)
-    time_to = Column(datetime)
+    time = Column(datetime)
 
 """
 class ScheduleAttribute:
     uid = graphene.ID()
     did = graphene.ID()
     content = graphene.String()
-    time_from = graphene.String()
-    time_to = graphene.String()
+    time = graphene.String()
 
 class Schedule(SQLAlchemyObjectType):
     class Meta:
