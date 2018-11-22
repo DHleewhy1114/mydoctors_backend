@@ -30,8 +30,8 @@ jwt = JWTManager(app)
 @app.route('/')
 def index():
     print (os.path.abspath(os.path.dirname(__file__)))
-    return app.send_static_file('index.html')
-
+    #return app.send_static_file('index.html')
+    return "hello"
 @login_manager.user_loader
 def load_user(user_id):
     return User.get(user_id)

@@ -31,7 +31,10 @@ class CreateUser(graphene.Mutation):
     class Arguments:
         input = CreateUserInput(required=True)
     def mutate(self, info, input):
+        print (input)
+        print (info)
         data = input_to_dictionary(input)
+        print (data)
         data['created'] = datetime.utcnow()
         data['edited'] = datetime.utcnow()
         #data['password_hash']=UserModel.set_password(data['password_hash'])

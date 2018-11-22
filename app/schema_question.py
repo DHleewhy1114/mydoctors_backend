@@ -36,6 +36,7 @@ class CreateQuestion(graphene.Mutation):
         data = input_to_dictionary(input)
         data['created'] = datetime.utcnow()
         data['edited'] = datetime.utcnow()
+        print (datetime.utcnow())
         question = QuestionModel(**data)
         db_session.add(question)
         db_session.commit()

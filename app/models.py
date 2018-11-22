@@ -11,35 +11,7 @@ db_session = scoped_session(sessionmaker(bind=engine, expire_on_commit=False))
 Base = declarative_base()
 Base.metadata.bind = engine
 Base.query = db_session.query_property()
-"""
 
-            Session = scoped_session(sessionmaker())
-
-            class MyClass(object):
-                query = Session.query_property()
-
-            # after mappers are defined
-            result = MyClass.query.filter(MyClass.name=='foo').all()
-
-class Department(Base):
-    __tablename__ = 'department'
-    id = Column(Integer, primary_key=True)
-    name = Column(String)
-
-
-class Employee(Base):
-    __tablename__ = 'employee'
-    id = Column(Integer, primary_key=True)
-    name = Column(String)
-    hired_on = Column(DateTime, default=func.now())
-    department_id = Column(Integer, ForeignKey('department.id'))
-    department = relationship(
-        Department,
-        backref=backref('employees',
-                        uselist=True,
-                        cascade='delete,all'))
-
-"""
 class User(Base):
     __tablename__='user'
     id = Column(Integer, primary_key=True)
@@ -121,37 +93,3 @@ class Question(Base):
     edited = Column(String(50))
     answerList = relationship(Answer, backref='answer')
     #profile_photo = Column(String(129))
-
-"""
-class Message(Base):
-    __tablename__='message'
-    id = Column(Integer, primary_key=True)
-    #uid = Column(Integer, ForeignKey('user.id'), nullable=False)
-    #did = Column(Integer, ForeignKey('doctor.id'), nullable=False)
-    is_doctor_send = Column(Boolean)
-    parent_id = Column(Integer,ForeignKey('message.id'),nullable=True)
-    content = Column(String(1000))
-    created = Column(String(50))
-    edited = Column(String(50))
-    chatroom_id = Column(Integer,ForeignKey('chatroom.id'),nullable=True)
-
-#chatroom message timestamp 정렬?
-
-
-class Messagerecipient(Base):
-    __tablename__='messagerecipient'
-    id = Column(Integer, primary_key=True)
-    recipient_id = Column(Integer, ForeignKey('user.id'), nullable=False)
-    message_id = Column(Integer, ForeignKey('message.id'), nullable=False)
-    created = Column(String(50))
-    edited = Column(String(50))
-
-class Chatroom(Base):
-    __tablename__='chatroom'
-    id = Column(Integer, primary_key=True)
-    uid = Column(Integer, ForeignKey('user.id'), nullable=False)
-    did = Column(Integer, ForeignKey('doctor.id'), nullable=False)
-    created = Column(String(50))
-    edited = Column(String(50))
-
-"""

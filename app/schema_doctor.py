@@ -34,6 +34,8 @@ class CreateDoctor(graphene.Mutation):
         data = input_to_dictionary(input)
         data['created'] = datetime.utcnow()
         data['edited'] = datetime.utcnow()
+        print (datetime.utcnow())
+        print (type(datetime.utcnow()))
         doctor = DoctorModel(**data)
         db_session.add(doctor)
         db_session.commit()
